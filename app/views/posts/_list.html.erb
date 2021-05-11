@@ -1,0 +1,50 @@
+<% @posts.each do |post| %>
+    <div class="card p-3 mb-3">
+        <div class="row">
+            <div class="col-1">
+            <div id="vote-actions-<%= post.id %>" class="vote" data-id="<%= post.id %>">
+                <div class="fa fa-arrow-up upvote <%= is_upvoted post %>"></div>
+                <span class="font-weight-bold score"><%= post.score %></span>
+                <div class="fa fa-arrow-down downvote <%= is_downvoted post %>"></div>
+
+            </div>
+
+            </div>
+
+            <div class="col-11">
+                <h4 class="mb-0"><%= link_to post.title, community_post_path(post.community_id, post) %></h4>
+                <p><small><%= link_to post.community.name, community_path(post.community_id) %> Posted by <%= link_to post.account.full_name, profile_path(post.account.username) %> <%= time_ago_in_words post.created_at %> ago.</small></p>
+            
+                    <p>
+                    <%= truncate post.body, length: 200 %> 
+                    </p>
+            </div>
+            
+        </div>
+    </div>
+  
+<% end %>
+
+<script>
+$(function(){
+    $(".vote").on("click",".upvote, .downvote", function(){
+        
+        var post_id = $(this).parent().data("id");
+        var is_upvote = $(this).hasClass("upvote");
+        console.log("upvote for post" +post_id);
+        console.log("is an upvote" +is_upvote);
+
+        $.ajax({
+            url: "/post/vote",
+            method: "POST",
+            data: {post_id: post_id, upvote: is_upvote},
+            success: function(){
+                console.log("success..")
+            }
+        })
+
+  
+
+    });
+});
+</script>
