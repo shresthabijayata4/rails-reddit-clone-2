@@ -1,8 +1,8 @@
 class PublicController < ApplicationController
 
     def index
-        @communities = Community.all.limit(5)
-        @posts = Post.order(id: :desc).limit(20)
+        @communities = Community.all.limit(10)
+        @posts = Post.order(created_at: :desc).limit(20)
     end
 
     def profile
